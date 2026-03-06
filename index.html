@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>कक्षा – The Class · हिंदी - बी (कक्षा 1-10)</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts: Poppins + Bangers -->
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f9f7f3;
+      color: #1e293b;
+      line-height: 1.5;
+    }
+
+    /* ----- LOADING SCREEN (with brand name) ----- */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #f9f7f3;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.6s ease;
+    }
+    #loading-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .loading-brand {
+      text-align: center;
+    }
+    .bouncing-text {
+      font-family: 'Bangers', cursive;
+      font-size: 5rem;
+      color: #d44c2f;
+      text-shadow: 5px 5px 0 #f4c542;
+      animation: bounce 1s infinite alternate;
+      line-height: 1.2;
+    }
+    .static-text {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-top: 1rem;
+      letter-spacing: 2px;
+      background: #f1f5f9;
+      padding: 0.5rem 2rem;
+      border-radius: 60px;
+      border: 2px solid #d44c2f;
+      box-shadow: 0 5px 0 #f4c542;
+      display: inline-block;
+    }
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-30px); }
+    }
+    @media (max-width: 480px) {
+      .bouncing-text {
+        font-size: 3.5rem;
+      }
+      .static-text {
+        font-size: 1.5rem;
+        padding: 0.4rem 1.5rem;
+      }
+    }
+
+    /* ----- MAIN CONTENT (initially hidden) ----- */
+    #main-content {
+      display: none;
+    }
+    #main-content.visible {
+      display: block;
+    }
+
+    /* ----- HEADER ----- */
+    .header {
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(8px);
+      padding: 1rem 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #d44c2f;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+    }
+    .logo-img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #d44c2f;
+      transition: transform 0.3s;
+    }
+    .logo-img:hover {
+      transform: rotate(5deg) scale(1.05);
+    }
+    .logo-text {
+      font-family: 'Bangers', cursive;
+      font-size: 2.2rem;
+      color: #1e293b;
+      line-height: 1.2;
+    }
+    .logo-text .small {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #d44c2f;
+      letter-spacing: 0.5px;
+      margin-left: 0.3rem;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    .nav-links button {
+      background: transparent;
+      border: none;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #1e293b;
+      cursor: pointer;
+      transition: 0.2s;
+      padding: 0.5rem 1rem;
+      border-radius: 40px;
+    }
+    .nav-links button:hover {
+      background: #f4c542;
+      color: #1e293b;
+    }
+    .lang-switch {
+      display: flex;
+      gap: 0.5rem;
+      background: #f1f5f9;
+      padding: 0.3rem;
+      border-radius: 40px;
+      border: 2px solid #d44c2f;
+    }
+    .lang-switch button {
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.4rem 1.2rem;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #1e293b;
+    }
+    .lang-switch button.active-lang {
+      background: #d44c2f;
+      color: white;
+    }
+
+    /* ----- VIEWS ----- */
+    .view {
+      display: none;
+    }
+    .view.active {
+      display: block;
+    }
+
+    /* ----- HOME VIEW ----- */
+    .home-view {
+      padding: 2rem 5%;
+    }
+    .image-slider {
+      width: 100%;
+      height: 300px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 40px;
+      margin-bottom: 3rem;
+      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.2);
+    }
+    .slider-images {
+      display: flex;
+      width: 300%;
+      height: 100%;
+      animation: slide 12s infinite ease-in-out;
+    }
+    .slider-images img {
+      width: 33.333%;
+      height: 100%;
+      object-fit: cover;
+    }
+    @keyframes slide {
+      0%, 25% { transform: translateX(0); }
+      33.33%, 58.33% { transform: translateX(-33.333%); }
+      66.66%, 91.66% { transform: translateX(-66.666%); }
+      100% { transform: translateX(0); }
+    }
+    .home-content {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+    }
+    .home-content h2 {
+      font-family: 'Bangers', cursive;
+      font-size: 3.5rem;
+      color: #d44c2f;
+      text-shadow: 3px 3px 0 #f4c542;
+    }
+    .home-content p {
+      font-size: 1.3rem;
+      margin: 2rem 0;
+    }
+    .home-buttons {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+    }
+    .home-btn {
+      background: #d44c2f;
+      color: white;
+      border: none;
+      font-size: 1.8rem;
+      font-weight: 600;
+      padding: 1rem 3rem;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 4px solid #f4c542;
+      box-shadow: 0 10px 0 #9e3a22;
+    }
+    .home-btn:hover {
+      transform: translateY(5px);
+      box-shadow: 0 5px 0 #9e3a22;
+    }
+
+    /* ----- SYLLABUS VIEW (clean class selector) ----- */
+    .syllabus-view {
+      padding: 2rem 5%;
+    }
+    .section-title {
+      font-family: 'Bangers', cursive;
+      font-size: 3rem;
+      margin: 2rem 0 1.5rem;
+      padding: 0.5rem 2rem;
+      display: inline-block;
+      background: #d44c2f;
+      color: white;
+      border-radius: 80px 20px 80px 20px;
+      box-shadow: 10px 10px 0 #f4c542;
+      border: 4px solid white;
+    }
+
+    /* simple, clean class selector */
+    .class-selector-wrapper {
+      text-align: center;
+      margin: 2rem 0 3rem;
+    }
+    .class-selector-label {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 1.5rem;
+      background: #f1f5f9;
+      display: inline-block;
+      padding: 0.5rem 2rem;
+      border-radius: 60px;
+      border: 2px solid #d44c2f;
+      box-shadow: 0 5px 0 #f4c542;
+    }
+    .class-selector-label i {
+      color: #d44c2f;
+      margin-right: 0.5rem;
+    }
+    .class-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+    }
+    .class-btn {
+      background: white;
+      border: 2px solid #d44c2f;
+      color: #1e293b;
+      font-size: 1.6rem;
+      font-weight: 600;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 5px 0 #f4c542;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
+    }
+    .class-btn.active-class {
+      background: #d44c2f;
+      color: white;
+      border-color: white;
+      box-shadow: 0 5px 0 #9e3a22;
+      transform: translateY(2px);
+    }
+    .class-btn:hover {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #f4c542;
+    }
+    .class-btn.active-class:hover {
+      transform: translateY(2px);
+      box-shadow: 0 3px 0 #9e3a22;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    .card {
+      background: white;
+      border-radius: 60px 20px 60px 20px;
+      padding: 2rem 1rem;
+      box-shadow: 12px 12px 0 #d44c2f;
+      border: 4px solid #f4c542;
+      transition: all 0.2s;
+      cursor: pointer;
+      text-align: center;
+    }
+    .card.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .card:hover {
+      transform: translate(-6px, -6px);
+      box-shadow: 18px 18px 0 #d44c2f;
+    }
+    .card i {
+      font-size: 3rem;
+      color: #1e293b;
+      margin-bottom: 1rem;
+      transition: transform 0.2s;
+    }
+    .card:hover i {
+      transform: scale(1.1);
+    }
+    .card h3 {
+      font-family: 'Bangers', cursive;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #d44c2f;
+    }
+
+    /* ----- ABOUT VIEW ----- */
+    .about-view {
+      padding: 2rem 5%;
+    }
+    .about-card {
+      background: #f1f5f9;
+      padding: 3rem;
+      border-radius: 60px 20px 60px 20px;
+      margin: 2rem 0;
+      border: 4px solid #d44c2f;
+      box-shadow: 12px 12px 0 #f4c542;
+    }
+    .about-card h2 {
+      font-family: 'Bangers', cursive;
+      font-size: 3rem;
+      color: #1e293b;
+      margin-bottom: 1rem;
+    }
+    .founder-info {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+    .founder-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: #d44c2f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: white;
+      border: 4px solid #f4c542;
+    }
+    .founder-details h3 {
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    .founder-details p {
+      font-size: 1.2rem;
+      color: #334155;
+    }
+    .quote {
+      background: white;
+      padding: 2rem;
+      border-radius: 40px;
+      border-left: 8px solid #d44c2f;
+      font-size: 1.5rem;
+      font-style: italic;
+      margin: 2rem 0;
+      box-shadow: 0 8px 0 #f4c542;
+    }
+    .quote i {
+      color: #d44c2f;
+      margin-right: 1rem;
+    }
+
+    /* ----- STORIES & Q&A VIEWS ----- */
+    .story-grid {
+      max-width: 1200px;
+      margin: 0 5% 3rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    .story-card {
+      background: white;
+      border-radius: 60px 20px 60px 20px;
+      padding: 2rem;
+      box-shadow: 12px 12px 0 #d44c2f;
+      border: 4px solid #f4c542;
+      transition: 0.2s;
+      cursor: pointer;
+      text-align: center;
+    }
+    .story-card.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .story-card:hover {
+      transform: translate(-6px, -6px);
+      box-shadow: 18px 18px 0 #d44c2f;
+    }
+    .story-card i {
+      font-size: 3rem;
+      color: #1e293b;
+    }
+
+    .qa-container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 5%;
+    }
+    .qa-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .qa-header h2 {
+      font-family: 'Bangers', cursive;
+      font-size: 3.5rem;
+      color: #d44c2f;
+      text-shadow: 3px 3px 0 #f4c542;
+    }
+    .pdf-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+    .pdf-btn {
+      background: white;
+      border: 4px solid #f4c542;
+      color: #1e293b;
+      padding: 0.8rem 2rem;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 6px 0 #d44c2f;
+    }
+    .pdf-btn:hover {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #d44c2f;
+    }
+
+    .accordion-section {
+      background: white;
+      border-radius: 40px 10px 40px 10px;
+      margin-bottom: 1.5rem;
+      border: 4px solid #f4c542;
+      overflow: hidden;
+      box-shadow: 8px 8px 0 #d44c2f;
+    }
+    .section-header {
+      background: #f1f5f9;
+      padding: 1.2rem 2rem;
+      font-family: 'Bangers', cursive;
+      font-size: 1.8rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #f4c542;
+    }
+    .section-header i {
+      transition: transform 0.3s;
+    }
+    .section-header.active i {
+      transform: rotate(180deg);
+    }
+    .section-content {
+      display: none;
+      padding: 1.5rem 2rem;
+    }
+    .section-content.show {
+      display: block;
+      animation: slideDown 0.3s;
+    }
+    @keyframes slideDown {
+      0% { opacity: 0; transform: translateY(-10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .qa-item {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px dashed #f4c542;
+    }
+    .qa-question {
+      font-weight: 700;
+      color: #d44c2f;
+      margin-bottom: 0.5rem;
+    }
+    .qa-answer {
+      padding-left: 1rem;
+      border-left: 4px solid #f4c542;
+    }
+
+    .back-btn {
+      background: white;
+      border: 4px solid #f4c542;
+      padding: 0.6rem 2rem;
+      border-radius: 60px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 2rem 5%;
+      box-shadow: 0 6px 0 #d44c2f;
+      transition: 0.2s;
+    }
+    .back-btn:hover {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #d44c2f;
+    }
+
+    /* ----- UNAVAILABLE VIEW (for missing content) ----- */
+    .unavailable-message {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ----- FOOTER ----- */
+    .footer {
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 4rem 5% 2rem;
+      margin-top: 4rem;
+      border-top: 8px solid #d44c2f;
+    }
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+    }
+    .footer-col h4 {
+      font-family: 'Bangers', cursive;
+      font-size: 2rem;
+      color: #f4c542;
+      margin-bottom: 1rem;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .footer-logo img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 3px solid #d44c2f;
+    }
+    .footer-logo span {
+      font-family: 'Bangers', cursive;
+      font-size: 2rem;
+      color: white;
+    }
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .footer-social a {
+      color: white;
+      background: #334155;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      transition: 0.2s;
+      border: 2px solid #f4c542;
+    }
+    .footer-social a:hover {
+      background: #f4c542;
+      color: #1e293b;
+      transform: translateY(-4px);
+    }
+    .footer-col ul {
+      list-style: none;
+    }
+    .footer-col li {
+      margin-bottom: 0.8rem;
+    }
+    .footer-col a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: color 0.2s;
+      font-weight: 500;
+    }
+    .footer-col a:hover {
+      color: #f4c542;
+    }
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      margin-top: 2rem;
+      border-top: 2px solid #334155;
+      color: #94a3b8;
+      font-size: 1rem;
+    }
+
+    /* ----- NOTIFICATIONS (both permanently dismissible) ----- */
+    .notification {
+      position: fixed;
+      right: 30px;
+      background: #d44c2f;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 60px;
+      box-shadow: 0 10px 0 #9e3a22, 0 10px 20px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transform: translateX(400px);
+      transition: transform 0.5s ease;
+      z-index: 9999;
+      border: 4px solid #f4c542;
+    }
+    .notification.show {
+      transform: translateX(0);
+    }
+    .notification i {
+      font-size: 2rem;
+    }
+    .notification button:not(.close-notification) {
+      background: white;
+      border: none;
+      color: #d44c2f;
+      font-weight: 700;
+      padding: 0.5rem 1.5rem;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 2px solid #f4c542;
+    }
+    .notification button:hover {
+      background: #f4c542;
+      color: #1e293b;
+    }
+    .close-notification {
+      background: transparent !important;
+      border: none !important;
+      color: white !important;
+      font-size: 2.5rem !important;
+      font-weight: bold !important;
+      padding: 0 0.5rem !important;
+      cursor: pointer;
+      transition: 0.2s;
+      line-height: 1;
+    }
+    .close-notification:hover {
+      transform: scale(1.3);
+      color: #f4c542 !important;
+      background: transparent !important;
+    }
+    /* Instagram notification specific */
+    #instaNotification {
+      bottom: 130px;
+      background: #c13584;
+      border-color: #f4c542;
+      box-shadow: 0 10px 0 #8a2e5c;
+    }
+    #instaNotification button:not(.close-notification) {
+      color: #c13584;
+    }
+    #subscribeNotification {
+      bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <!-- LOADING SCREEN with brand name -->
+  <div id="loading-screen">
+    <div class="loading-brand">
+      <div class="bouncing-text">KAKSHA</div>
+      <div class="static-text">The Class</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT (initially hidden) -->
+  <div id="main-content">
+    <!-- HEADER -->
+    <header class="header">
+      <div class="logo-container" onclick="showView('homeView')">
+        <img src="https://yt3.googleusercontent.com/a2aW8c2gUETQI2Id0Sd1-x45NmtLlWtBAHJxJDA6uFx7Gqf2Z0cmz5LbJcfzMAapjSKcCeZKuA=s160-c-k-c0x00ffffff-no-rj" alt="Kaksha logo" class="logo-img">
+        <div class="logo-text">
+          KAKSHA <span class="small">– The class</span>
+        </div>
+      </div>
+      <div class="nav-links">
+        <button onclick="showView('homeView')" data-i18n="nav.home">HOME</button>
+        <button onclick="showView('syllabusView')" data-i18n="nav.syllabus">SYLLABUS</button>
+        <button onclick="showView('aboutView')" data-i18n="nav.about">ABOUT US</button>
+      </div>
+      <div class="lang-switch">
+        <button id="lang-en" class="active-lang" data-lang="en">EN</button>
+        <button id="lang-hi" data-lang="hi">हिन्दी</button>
+      </div>
+    </header>
+
+    <!-- HOME VIEW -->
+    <div id="homeView" class="view active">
+      <div class="home-view">
+        <div class="image-slider">
+          <div class="slider-images">
+            <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=800&auto=format" alt="Books">
+            <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&auto=format" alt="Student">
+            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format" alt="Classroom">
+          </div>
+        </div>
+        <div class="home-content">
+          <h2 data-i18n="home.whatis">What is Kaksha – The Class?</h2>
+          <p data-i18n="home.description">Kaksha – The Class is your friendly learning space for Hindi-B (CBSE classes 1 to 10). We provide clear explanations, PDF notes, and Q&A for stories. Learn grammar, poetry, and writing in a fun, easy way!</p>
+          <div class="home-buttons">
+            <button class="home-btn" onclick="showView('syllabusView')" data-i18n="nav.syllabus">SYLLABUS</button>
+            <button class="home-btn" onclick="showView('aboutView')" data-i18n="nav.about">ABOUT US</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SYLLABUS VIEW with clean class selector -->
+    <div id="syllabusView" class="view">
+      <div class="syllabus-view">
+        <h2 class="section-title" data-i18n="syllabus.title">पाठ्यक्रम झलक</h2>
+        
+        <!-- clean class selector 1 to 10 -->
+        <div class="class-selector-wrapper">
+          <div class="class-selector-label">
+            <i class="fas fa-graduation-cap"></i>
+            <span data-i18n="class.choose">Choose your class</span>
+          </div>
+          <div class="class-selector" id="classSelector">
+            <!-- generated by JS -->
+          </div>
+        </div>
+
+        <!-- syllabus cards (hidden until class selected) -->
+        <div id="syllabusCards" class="card-grid" style="display: none;">
+          <div class="card" id="storiesCard" onclick="handleStoriesClick()">
+            <i class="fas fa-book-open"></i>
+            <h3 data-i18n="card.stories">कहानियाँ</h3>
+            <p data-i18n="card.stories.desc">पाठ्यक्रम की कहानियाँ</p>
+          </div>
+          <div class="card" id="poetryCard" onclick="showUnavailable('poetry')">
+            <i class="fas fa-feather"></i>
+            <h3 data-i18n="card.poetry">पद्य</h3>
+            <p data-i18n="card.poetry.desc">कविताएँ</p>
+          </div>
+          <div class="card" id="grammarCard" onclick="showUnavailable('grammar')">
+            <i class="fas fa-language"></i>
+            <h3 data-i18n="card.grammar">व्याकरण</h3>
+            <p data-i18n="card.grammar.desc">रस, छंद, अलंकार</p>
+          </div>
+          <div class="card" id="compositionCard" onclick="showUnavailable('composition')">
+            <i class="fas fa-pen-fancy"></i>
+            <h3 data-i18n="card.composition">रचना</h3>
+            <p data-i18n="card.composition.desc">अनुच्छेद, पत्र</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT VIEW -->
+    <div id="aboutView" class="view">
+      <div class="about-view">
+        <div class="about-card">
+          <h2 data-i18n="about.title">हमारे बारे में</h2>
+          <p data-i18n="about.text" style="font-size: 1.2rem; margin-bottom: 2rem;">कक्षा – The Class एक समर्पित मंच है जो CBSE कक्षा 1 से 10 तक के छात्रों को हिंदी-बी में उत्कृष्टता दिलाने के लिए बनाया गया है। हमारे संसाधन, पीडीएफ नोट्स और प्रश्नोत्तर आपकी तैयारी को मजबूत बनाते हैं।</p>
+          
+          <div class="founder-info">
+            <div class="founder-img">
+              <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <div class="founder-details">
+              <h3 data-i18n="founder.name">संस्थापक: Monika Som</h3>
+              <p data-i18n="founder.desc">अनुभवी हिंदी शिक्षिका, 10+ वर्षों का अनुभव, CBSE पाठ्यक्रम की गहरी समझ।</p>
+            </div>
+          </div>
+
+          <div class="quote">
+            <i class="fas fa-quote-left"></i>
+            <span data-i18n="founder.quote">"शिक्षा वह जादू है जो जीवन को रोशन कर देता है। मेहनत करो, सपने देखो और उन्हें पूरा करो।"</span>
+          </div>
+
+          <a href="https://forms.gle/9eKYRbavnbu8FQnz9" target="_blank" class="contact-btn" style="background: #d44c2f; color: white; padding: 1rem 2.5rem; border-radius: 60px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border: 4px solid #f4c542; box-shadow: 0 8px 0 #9e3a22; margin-top: 1rem;">
+            <i class="fas fa-paper-plane"></i> <span data-i18n="about.contact">संदेश भेजें</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- STORIES INDEX VIEW (dynamic based on class) -->
+    <div id="storiesView" class="view">
+      <button class="back-btn" onclick="showView('syllabusView')"><i class="fas fa-arrow-left"></i> <span data-i18n="back.syllabus">पाठ्यक्रम</span></button>
+      <h2 class="section-title" style="margin-left:5%;" data-i18n="stories.title">कहानियाँ</h2>
+      <div id="storiesContainer" class="story-grid">
+        <!-- dynamically filled -->
+      </div>
+    </div>
+
+    <!-- BADE BHAI VIEW (only for class 10) -->
+    <div id="badeBhaiView" class="view">
+      <button class="back-btn" onclick="showView('storiesView')"><i class="fas fa-arrow-left"></i> <span data-i18n="back.stories">कहानियाँ</span></button>
+      <div class="qa-container">
+        <div class="qa-header">
+          <h2>बड़े भाई साहब</h2>
+          <div class="pdf-buttons">
+            <button class="pdf-btn" onclick="viewPDF()"><i class="fas fa-eye"></i> <span data-i18n="pdf.view">देखें PDF</span></button>
+          </div>
+        </div>
+        <div id="qaAccordion"></div>
+      </div>
+    </div>
+
+    <!-- UNAVAILABLE CONTENT VIEW (for poetry, grammar, composition, and non-10 stories) -->
+    <div id="unavailableView" class="view">
+      <button class="back-btn" onclick="showView('syllabusView')"><i class="fas fa-arrow-left"></i> <span data-i18n="back.syllabus">पाठ्यक्रम</span></button>
+      <div class="qa-container unavailable-message">
+        <div class="qa-header">
+          <h2 id="unavailableTitle">कोई सामग्री नहीं</h2>
+        </div>
+        <div class="story-card disabled" style="max-width: 500px; margin: 0 auto;">
+          <i class="fas fa-ban" style="font-size: 4rem;"></i>
+          <h3 id="unavailableMessage">कक्षा 1 के लिए अभी कोई कहानी नहीं है।</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-col">
+          <div class="footer-logo">
+            <img src="https://yt3.googleusercontent.com/a2aW8c2gUETQI2Id0Sd1-x45NmtLlWtBAHJxJDA6uFx7Gqf2Z0cmz5LbJcfzMAapjSKcCeZKuA=s160-c-k-c0x00ffffff-no-rj" alt="Kaksha logo">
+            <span>KAKSHA – The class</span>
+          </div>
+          <p style="margin-bottom:1rem;" data-i18n="footer.subtitle">हिंदी - बी · कक्षा 1-10 CBSE</p>
+          <div class="footer-social">
+            <a href="https://www.youtube.com/@Kakshatheclass" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://telegram.org" target="_blank"><i class="fab fa-telegram"></i></a>
+            <a href="https://forms.gle/9eKYRbavnbu8FQnz9" target="_blank"><i class="fas fa-envelope"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.links">त्वरित लिंक</h4>
+          <ul>
+            <li><a href="#" onclick="showView('homeView'); return false;" data-i18n="nav.home">होम</a></li>
+            <li><a href="#" onclick="showView('syllabusView'); return false;" data-i18n="nav.syllabus">पाठ्यक्रम</a></li>
+            <li><a href="#" onclick="showView('aboutView'); return false;" data-i18n="nav.about">हमारे बारे में</a></li>
+            <li><a href="https://forms.gle/9eKYRbavnbu8FQnz9" target="_blank" data-i18n="nav.contact">संपर्क करें</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.resources">संसाधन</h4>
+          <ul>
+            <li><a href="#" onclick="viewPDF(); return false;" data-i18n="footer.badebhai">बड़े भाई साहब PDF</a></li>
+            <li><a href="#" data-i18n="footer.syllabus">सिलेबस</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <i class="far fa-copyright"></i> 2026 कक्षा – The Class · <span data-i18n="footer.rights">सर्वाधिकार सुरक्षित</span>
+      </div>
+    </footer>
+
+    <!-- TWO NOTIFICATIONS: both permanently dismissible -->
+    <div class="notification" id="subscribeNotification">
+      <i class="fab fa-youtube"></i>
+      <span>Subscribe to my YouTube channel!</span>
+      <button class="notif-action" data-url="https://www.youtube.com/@Kakshatheclass">Subscribe</button>
+      <button class="close-notification">×</button>
+    </div>
+
+    <div class="notification" id="instaNotification">
+      <i class="fab fa-instagram"></i>
+      <span>Follow us on Instagram!</span>
+      <button class="notif-action" data-url="https://www.instagram.com">Follow</button>
+      <button class="close-notification">×</button>
+    </div>
+  </div>
+
+  <script>
+    // ---------- LOADING SCREEN ----------
+    // Hide loading screen after 2 seconds, show main content
+    setTimeout(() => {
+      document.getElementById('loading-screen').classList.add('hidden');
+      document.getElementById('main-content').classList.add('visible');
+    }, 2000);
+
+    // ---------- GLOBAL VARIABLES ----------
+    let selectedClass = null; // 1-10
+
+    // ---------- NOTIFICATION LOGIC (permanent dismiss) ----------
+    function setupNotifications() {
+      document.querySelectorAll('.notification').forEach(notif => {
+        const closeBtn = notif.querySelector('.close-notification');
+        const actionBtn = notif.querySelector('.notif-action');
+        
+        if (closeBtn) {
+          closeBtn.addEventListener('click', function() {
+            notif.remove();
+          });
+        }
+        
+        if (actionBtn) {
+          actionBtn.addEventListener('click', function() {
+            const url = actionBtn.getAttribute('data-url');
+            if (url) window.open(url, '_blank');
+            notif.remove();
+          });
+        }
+      });
+    }
+
+    setTimeout(() => {
+      const ytNotif = document.getElementById('subscribeNotification');
+      if (ytNotif) ytNotif.classList.add('show');
+    }, 2000);
+
+    setTimeout(() => {
+      const instaNotif = document.getElementById('instaNotification');
+      if (instaNotif) instaNotif.classList.add('show');
+    }, 4000);
+
+    setupNotifications();
+
+    // ---------- VIEW NAVIGATION ----------
+    function showView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      var target = document.getElementById(viewId);
+      if (target) target.classList.add('active');
+    }
+
+    // ---------- CLASS SELECTOR (1-10) ----------
+    function initClassSelector() {
+      const container = document.getElementById('classSelector');
+      for (let i = 1; i <= 10; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'class-btn';
+        btn.textContent = i;
+        btn.setAttribute('data-class', i);
+        btn.onclick = () => selectClass(i);
+        container.appendChild(btn);
+      }
+    }
+    initClassSelector();
+
+    function selectClass(cls) {
+      selectedClass = cls;
+      document.querySelectorAll('.class-btn').forEach(btn => {
+        btn.classList.toggle('active-class', btn.getAttribute('data-class') == cls);
+      });
+      const cards = document.getElementById('syllabusCards');
+      cards.style.display = 'grid';
+    }
+
+    // ---------- HANDLE STORIES CARD CLICK ----------
+    function handleStoriesClick() {
+      if (!selectedClass) {
+        alert('कृपया पहले कक्षा चुनें / Please select a class first');
+        return;
+      }
+      showView('storiesView');
+      renderStoriesForClass(selectedClass);
+    }
+
+    // ---------- RENDER STORIES BASED ON CLASS ----------
+    function renderStoriesForClass(cls) {
+      const container = document.getElementById('storiesContainer');
+      container.innerHTML = '';
+      if (cls == 10) {
+        const storyCard = document.createElement('div');
+        storyCard.className = 'story-card';
+        storyCard.innerHTML = `
+          <i class="fas fa-user-tie"></i>
+          <h3>बड़े भाई साहब</h3>
+          <p>प्रेमचंद (संपूर्ण प्रश्नोत्तर)</p>
+        `;
+        storyCard.onclick = () => showBadeBhai();
+        container.appendChild(storyCard);
+      } else {
+        const msgCard = document.createElement('div');
+        msgCard.className = 'story-card disabled';
+        msgCard.innerHTML = `
+          <i class="fas fa-ban"></i>
+          <h3>कोई कहानी उपलब्ध नहीं</h3>
+          <p>कक्षा ${cls} के लिए अभी कोई कहानी नहीं है।</p>
+        `;
+        container.appendChild(msgCard);
+      }
+    }
+
+    // ---------- SHOW BADE BHAI VIEW ----------
+    function showBadeBhai() {
+      if (selectedClass != 10) {
+        alert('यह कहानी केवल कक्षा 10 के लिए है।');
+        return;
+      }
+      showView('badeBhaiView');
+      renderQA();
+    }
+
+    // ---------- SHOW UNAVAILABLE CONTENT (for poetry, grammar, composition, and non-10 classes) ----------
+    function showUnavailable(section) {
+      if (!selectedClass) {
+        alert('कृपया पहले कक्षा चुनें / Please select a class first');
+        return;
+      }
+      const titleMap = {
+        'stories': 'कहानियाँ',
+        'poetry': 'पद्य',
+        'grammar': 'व्याकरण',
+        'composition': 'रचना'
+      };
+      const sectionHindi = titleMap[section] || section;
+      document.getElementById('unavailableTitle').innerText = sectionHindi;
+      document.getElementById('unavailableMessage').innerHTML = `कोई ${sectionHindi} उपलब्ध नहीं<br>कक्षा ${selectedClass} के लिए अभी कोई ${sectionHindi} नहीं है।`;
+      showView('unavailableView');
+    }
+
+    // ---------- Q&A DATA ----------
+    const qaData = {
+      veryShort: [
+        { q: "कथा नायक की रुचि किन कार्यों में थी?", a: "कथा नायक की रुचि खेल-कूद, कागज़ की तितलियाँ उड़ाना, चारदीवारी पर चढ़कर नीचे कूदना और फाटक पर सवार होकर उसे आगे-पीछे चलाना, पतंगबाजी, आदि कार्यों में थी।" },
+        { q: "बड़े भाई साहब छोटे भाई से हर समय पहला सवाल क्या पूछते थे?", a: "बड़े भाई छोटे भाई से हर समय एक ही सवाल पूछते थे-‘कहाँ थे’?" },
+        { q: "दूसरी बार पास होने पर छोटे भाई के व्यवहार में क्या परिवर्तन आया?", a: "दूसरी बार पास होने पर छोटे भाई के व्यवहार में यह परिवर्तन आया कि वह स्वच्छंद और घमंडी हो गया। वह यह सोचने लगा कि अब पढ़े या न पढ़े, वह पास तो हो ही जाएगा, उसकी तकदीर बलवान है। वह बड़े भाई की सहनशीलता का अनुचित लाभ उठाकर अपना अधिक समय खेलकूद में लगाने लगा।" },
+        { q: "बड़े भाई साहब छोटे भाई से उम्र में कितने बड़े थे और वे कौन-सी कक्षा में पढ़ते थे?", a: "बड़े भाई साहब लेखक से उम्र में 5 साल बड़े थे। वे नवीं कक्षा में पढ़ते थे।" },
+        { q: "बड़े भाई साहब दिमाग को आराम देने के लिए क्या करते थे?", a: "बड़े भाई साहब दिमाग को आराम देने के लिए कभी कापी पर वे कभी किताब के हाशियों पर चिड़ियों, कुत्तों, बिल्लियों के चित्र बनाते थे। कभी-कभी वे एक शब्द या वाक्य को अनेक बार लिख डालते, कभी एक शेर-शायरी की बार-बार सुंदर अक्षरों में नकल करते। कभी ऐसी शब्द रचना करते, जो निरर्थक होती, कभी किसी आदमी को चेहरा बनाते।" }
+      ],
+      short25_30: [
+        { q: "छोटे भाई ने अपनी पढ़ाई का टाइम-टेबिल बनाते समय क्या-क्या सोचा और फिर उसका पालन क्यों नहीं कर पाया?", a: "पढ़ाई का टाइम-टेबिल बनाते समय छोटे भाई ने यह सोचा कि वह खूब जी लगाकर पढ़ेगा, उसने अधिक मन लगाकर पढ़ने का निश्चय कर टाइम-टेबिल बनाया, इस टाइम-टेबिल का पालन वह न कर पाया, क्योंकि उसमें खेलकूद के लिए कोई स्थान ही नहीं था। मैदान की हरियाली, फुटबॉल की उछल-कूद, बॉलीबॉल की तेज़ी और फुरती उसे अज्ञात और अनिवार्य रूप से खींच ले जाती और वहाँ जाते ही वह सब कुछ भूल जाता।" },
+        { q: "एक दिन जब गुल्ली-डंडा खेलने के बाद छोटा भाई बड़े भाई साहब के सामने पहुँचा तो उनकी क्या प्रतिक्रिया हुई ?", a: "छोटा भाई दिनभर गुल्ली-डंडा खेलकर बड़े भाई के सामने पहुँचा तो बड़े भाई ने तलवार खींच ली, गुस्से में उसे खूब डाँटा। उसे घमंडी कहा और सर्वनाश होने का डर दिखाया। उसने उसकी सफलता को भी तुक्का बताया और आगे की पढ़ाई का भय दिखलाया।" },
+        { q: "बड़े भाई साहब को अपने मन की इच्छाएँ क्यों दबानी पड़ती थीं?", a: "बड़े भाई साहब बड़े होने के नाते यही चाहते और कोशिश करते थे कि वे जो कुछ भी करें, वह छोटे भाई के लिए एक उदाहरण का काम करे। वे स्वयं अनुशासित रह कर ही छोटे भाई को अनुशासन में रख पाएँगे।" },
+        { q: "बड़े भाई साहब छोटे भाई को क्या सलाह देते थे और क्यों ?", a: "बड़े भाई साहब छोटे भाई को दिन-रात पढ़ने तथा खेल-कूद में समय न गँवाने की सलाह देते थे। वे बड़ा होने के कारण उसे राह पर चलाना अपना कर्तव्य समझते थे।" },
+        { q: "छोटे भाई ने बड़े भाई साहब के नरम व्यवहार का क्या फ़ायदा उठाया?", a: "छोटे भाई ने बड़े भाई साहब के नरम व्यवहार का गलत फ़ायदा उठाया, जिससे उसकी स्वच्छंदता बढ़ गई और उसने पढ़ना-लिखना बंद कर दिया। उसके मन में यह भावना बलवती हो गई कि वह पढ़े या न पढ़े परीक्षा में पास अवश्य हो जाएगा। इतना ही नहीं, उसने अपना सारा समय पतंगबाज़ी को ही भेंट कर दिया।" }
+      ],
+      long50_60: [
+        { q: "बड़े भाई की डाँट-फटकार अगर न मिलती, तो क्या छोटा भाई कक्षा में अव्वल आता? अपने विचार प्रकट कीजिए।", a: "मेरे विचार में यह सच है कि अगर बड़े भाई की डाँट-फटकार छोटे भाई को न मिलती, तो वह कक्षा में कभी भी अव्वल नहीं आता। बड़े भाई की डाँट-फटकार के कारण ही वह थोड़ा बहुत पढ़ता था जिससे रोज़ का टास्क पूरा हो जाए और उसे कक्षा में ज़लील न होना पड़े। बड़े भाई की डाँट-फटकार के कारण ही छोटा भाई कक्षा में अव्वल आता था।" },
+        { q: "इस पाठ में लेखक ने समूची शिक्षा के किन तौर-तरीकों पर व्यंग्य किया है? क्या आप उनके विचार से सहमत हैं?", a: "बड़े भाई साहब पाठ में लेखक ने समूची शिक्षा के तौर तरीकों पर व्यंग्य करते हुए कहा है कि ये शिक्षा अंग्रेजी बोलने, पढ़ने पर जोर देती है चाहे किसी को अंग्रेजी पढ़ने में रूचि है या नहीं। अपने देश के इतिहास के साथ साथ दूसरे देशों के इतिहास को भी पढ़ना पढ़ता है जो बिलकुल भी जरुरी नहीं है। यहाँ पर रटने वाली प्रणाली पर जोर दिया जाता है। बच्चों को कोई विषय समझ में आये या ना आये रट कर परीक्षा में पास हो ही जाते हैं। छोटे -छोटे विषयों पर लम्बे -लम्बे निबंध लिखने होते हैं। ऐसी शिक्षा प्रणाली जो लाभदायक कम और बोझ ज्यादा लगे ठीक नहीं है।" },
+        { q: "बड़े भाई साहब के अनुसार जीवन की समझ कैसे आती है?", a: "बड़े भाई साहब के अनुसार जीवन की समझ केवल किताबी ज्ञान से नहीं आती। बल्कि जीवन के अनुभवों से आती है। इसके लिए उन्होंने अपनी अम्मा, दादा और हेडमास्टर की माँ के उदाहरण भी दिए है। उनका कहना है कि हम इतने पढ़े होने के बाद भी अगर बीमार भी पड़ जाते है तो परेशान हो जाते हैं लेकिन हमारे माँ दादा बिना पढ़े भी हर मुसीबत का सामना बड़ी आसानी से करते है इसमें केवल इतना ही फर्क है कि उनके पास हमसे ज्यादा जीवन का अनुभव है। बड़े भाई के अनुसार अनुभव ही समझ दिलाता है।" },
+        { q: "छोटे भाई के मन में बड़े भाई साहब के प्रति श्रद्धा क्यों उत्पन्न हुई?", a: "छोटे भाई के मन में बड़े भाई साहब के प्रति श्रद्धा इसलिए उत्पन्न हुई क्योंकि बड़े भाई साहब ने छोटे भाई को खूब डाँटा और समझाते हुए जब अपनी अम्मा, दादा और हेडमास्टर की माँ के उदाहरण भी दिए तब छोटे भाई को अपनी लघुता का एहसास हो रहा था न केवल उम्र से बल्कि मन से भी और भाई साहब के लिए उसके मन में इज्जत और भी बड़ गई।" },
+        { q: "बड़े भाई की स्वभावगत विशेषताएँ बताइए?", a: "प्रेमचंद की कहानी 'बड़े भाई साहब' में बड़े भाई साहब मुख्य पात्र हैं। कहानी के अनुसार बड़े भाई की स्वभावगत विशेषताएँ: 1. परिश्रमी- बड़ा भाई बड़ा ही परिश्रमी था। वह दिन-रात पढ़ाई में ही जुटा रहता था इसलिए खेल-कूद, क्रिकेट मैच आदि में उसकी कोई रुचि नहीं थी। वह बार-बार फेल होने के बावजूद पढ़ाई में लीन रहता था। 2. अनुशासनप्रिय- वह अनुशासनप्रिय था वह आदर्शवादी बनकर छोटे भाई के सामने एक उदाहरण प्रस्तुत करना चाहता है। 3. जिम्मेदार- बड़ा भाई बहुत बड़ा नहीं था फिर भी छोटे भाई की जिम्मेदारियों के कारण अपनी इच्छाओं को प्रकट नहीं करता था, यदि वह खुद बेराह चले तो भाई को कैसे संभालेगा।" },
+        { q: "बड़े भाई साहब ने जिंदगी के अनुभव और किताबी ज्ञान में से किसे और क्यों महत्त्वपूर्ण कहा है?", a: "बड़े भाई साहब ने जिंदगी के अनुभव और किताबी ज्ञान में से जिंदगी के अनुभव को अधिक महत्त्वपूर्ण माना है। उनका मत था कि किताबी ज्ञान तो रट्टा मारने का नाम है। उसमें ऐसी-ऐसी बातें हैं जिनका जीवन से कुछ लेना-देना नहीं। इससे बुद्धि का विकास और जीवन की सही समझ विकसित नहीं हो पाती है। इसके विपरीत अनुभव से जीवन की सही समझ विकसित होती है। इसी अनुभव से जीवन के सुख-दुख से सरलता से पार पाया जाता है। घर का खर्च चलाना हो घर के प्रबंध करने हो या बीमारी का संकट हो, वहीं उम्र और अनुभव ही इनमें व्यक्ति की मदद करते हैं।" }
+      ],
+      aashay: [
+        { q: "इम्तिहान पास कर लेना कोई चीज नहीं, असल चीज़ है बुद्धि का विकास।", a: "इस पंक्ति का आशय है कि इम्तिहान में पास हो जाना कोई बड़ी बात नहीं है, क्योंकि इम्तिहान तो रटकर भी पास किया जा सकता है। केवल इम्तिहान पास करने से जीवन का अनुभव प्राप्त नहीं होता और बिना अनुभव के बुद्धि का विकास नहीं होता। वास्तविक ज्ञान तो बुद्धि का विकास है, जिससे व्यक्ति जीवन को सार्थक बना सकता है।" },
+        { q: "फिर भी जैसे मौत और विपत्ति के बीच भी आदमी मोह और माया के बंधन में जकड़ा रहता है, मैं फटकार घुड़कियाँ खाकर भी खेलकूद का तिरस्कार न कर सकता था।", a: "लेखक खेल-कूद, सैर-सपाटे और मटरगश्ती का बड़ा प्रेमी था। उसका बड़ा भाई इन सब बातों के लिए उसे खूब डाँटता-डपटता था। उसे घुड़कियाँ देता था, तिरस्कार करता था। परंतु फिर भी वह खेल-कूद को नहीं छोड़ सकता था। वह खेलों पर जान छिड़कता था। जिस प्रकार विविध संकटों में फँसकर भी मनुष्य मोहमाया में बँधा रहता है, उसी प्रकार लेखक डाँट-फटकार सहकर भी खेल-कूद के आकर्षण से बँधा रहता था।" },
+        { q: "बुनियाद ही पुख्ता न हो, तो मकान कैसे पायेदार बने ?", a: "इस पंक्ति का आशय है कि जिस प्रकार मकान को मजबूत तथा टिकाऊ बनाने के लिए उसकी नींव को गहरा तथा ठोस बनाया जाता है, ठीक उसी प्रकार से जीवन की नींव को मजबूत बनाने के लिए शिक्षा रूपी भवन की नींव भी बहुत मज़बूत होनी चाहिए, क्योंकि इसके बिना जीवन रूपी मकान पायदार नहीं बन सकता।" },
+        { q: "आँखें आसमान की ओर थीं और मन उस आकाशगामी पथिक की ओर, जो बंद राति से आ रहा था, मानो कोई आत्मा स्वर्ग से निकलकर विरक्त मन से नए संस्करण ग्रहण करने जा रही हो।", a: "लेखक पतंग लूटने के लिए आकाश की ओर देखता हुआ दौड़ा जा रहा था। उसकी आँखें आकाश में उड़ने वाली पतंग रूपी यात्री की ओर थीं। अर्थात् उसे पतंग आकाश में उड़ने वाली दिव्य आत्मा जैसी मनोरम प्रतीत हो रही थी। वह आत्मा मानो मंद गति से झूमती हुई नीचे की ओर आ रही थी। आशय यह है कि कटी हुई पतंग धीरे-धीरे धरती की ओर गिर रही थी। लेखक को कटी पतंग इतनी अच्छी लग रही थी मानो वह कोई आत्मा हो जो स्वर्ग से मिल कर आई हो और बड़े भारी मन से किसी दूसरे के हाथों में आने के लिए धरती पर उतर रही हो।" }
+      ]
+    };
+
+    function renderQA() {
+      const container = document.getElementById('qaAccordion');
+      if (!container) return;
+      if (container.children.length > 0) return;
+
+      const sections = [
+        { title: 'संक्षिप्त प्रश्न', data: qaData.veryShort },
+        { title: '25-30 शब्दों में', data: qaData.short25_30 },
+        { title: '50-60 शब्दों में', data: qaData.long50_60 },
+        { title: 'आशय स्पष्ट', data: qaData.aashay }
+      ];
+
+      sections.forEach((sec) => {
+        const sectionDiv = document.createElement('div');
+        sectionDiv.className = 'accordion-section';
+
+        const header = document.createElement('div');
+        header.className = 'section-header';
+        header.innerHTML = `${sec.title} <i class="fas fa-chevron-down"></i>`;
+        header.addEventListener('click', () => {
+          header.classList.toggle('active');
+          content.classList.toggle('show');
+        });
+
+        const content = document.createElement('div');
+        content.className = 'section-content';
+
+        sec.data.forEach(item => {
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'qa-item';
+          itemDiv.innerHTML = `<div class="qa-question">${item.q}</div><div class="qa-answer">${item.a}</div>`;
+          content.appendChild(itemDiv);
+        });
+
+        sectionDiv.appendChild(header);
+        sectionDiv.appendChild(content);
+        container.appendChild(sectionDiv);
+      });
+    }
+
+    // PDF function
+    function viewPDF() {
+      const win = window.open('', '_blank');
+      let html = `<html><head><title>बड़े भाई साहब - प्रश्नोत्तर</title>`;
+      html += `<style>body { font-family: 'Poppins', sans-serif; padding: 40px; background: #f9f7f3; } h1 { color: #1e293b; } .section { margin-top: 30px; } .section h2 { background: #d44c2f; color: white; display: inline-block; padding: 8px 30px; border-radius: 40px; border: 4px solid #f4c542; } .qa { background: white; padding: 20px; border-radius: 20px; margin: 20px 0; border-left: 8px solid #d44c2f; } .q { font-weight: 700; color: #d44c2f; }</style>`;
+      html += `</head><body><h1>📘 बड़े भाई साहब - संपूर्ण प्रश्नोत्तर</h1>`;
+
+      function addSection(title, items) {
+        html += `<div class="section"><h2>${title}</h2>`;
+        items.forEach(item => {
+          html += `<div class="qa"><div class="q">${item.q}</div><div>${item.a}</div></div>`;
+        });
+        html += `</div>`;
+      }
+
+      addSection('संक्षिप्त प्रश्न', qaData.veryShort);
+      addSection('25-30 शब्दों में', qaData.short25_30);
+      addSection('50-60 शब्दों में', qaData.long50_60);
+      addSection('आशय स्पष्ट', qaData.aashay);
+
+      html += `</body></html>`;
+      win.document.write(html);
+      win.document.close();
+    }
+
+    // ---------- LANGUAGE TRANSLATION ----------
+    const translations = {
+      en: {
+        'nav.home': 'HOME',
+        'nav.syllabus': 'SYLLABUS',
+        'nav.about': 'ABOUT US',
+        'home.whatis': 'What is Kaksha – The Class?',
+        'home.description': 'Kaksha – The Class is your friendly learning space for Hindi-B (CBSE classes 1 to 10). We provide clear explanations, PDF notes, and Q&A for stories. Learn grammar, poetry, and writing in a fun, easy way!',
+        'syllabus.title': 'Syllabus Overview',
+        'class.choose': 'Choose your class',
+        'card.stories': 'Stories',
+        'card.stories.desc': 'Syllabus stories',
+        'card.poetry': 'Poetry',
+        'card.poetry.desc': 'Poems',
+        'card.grammar': 'Grammar',
+        'card.grammar.desc': 'Ras, Chhand, Alankar',
+        'card.composition': 'Composition',
+        'card.composition.desc': 'Paragraph, letter',
+        'about.title': 'About Us',
+        'about.text': 'Kaksha – The Class is a dedicated platform to help CBSE class 1 to 10 students excel in Hindi-B. Our resources, PDF notes and Q&A strengthen your preparation.',
+        'about.contact': 'Send Message',
+        'founder.name': 'Founder: Monika Som',
+        'founder.desc': 'Experienced Hindi teacher, 10+ years of experience, deep understanding of CBSE curriculum.',
+        'founder.quote': '"Education is the magic that illuminates life. Work hard, dream, and achieve."',
+        'back.syllabus': 'Syllabus',
+        'back.stories': 'Stories',
+        'stories.title': 'Stories',
+        'story.premchand': 'Premchand (Complete Q&A)',
+        'pdf.view': 'View all',
+        'footer.subtitle': 'Hindi - B · Class 1-10 CBSE',
+        'footer.links': 'Quick Links',
+        'nav.contact': 'Contact',
+        'footer.resources': 'Resources',
+        'footer.badebhai': 'Bade Bhai Sahab PDF',
+        'footer.syllabus': 'Syllabus',
+        'footer.rights': 'All rights reserved'
+      },
+      hi: {
+        'nav.home': 'होम',
+        'nav.syllabus': 'पाठ्यक्रम',
+        'nav.about': 'हमारे बारे में',
+        'home.whatis': 'कक्षा – The Class क्या है?',
+        'home.description': 'कक्षा – The Class हिंदी-बी (CBSE कक्षा 1 से 10) के लिए आपका अनुकूल शिक्षण स्थान है। हम स्पष्ट व्याख्या, PDF नोट्स और कहानियों के प्रश्नोत्तर प्रदान करते हैं। व्याकरण, पद्य और लेखन को मज़ेदार, आसान तरीके से सीखें!',
+        'syllabus.title': 'पाठ्यक्रम झलक',
+        'class.choose': 'अपनी कक्षा चुनें',
+        'card.stories': 'कहानियाँ',
+        'card.stories.desc': 'पाठ्यक्रम की कहानियाँ',
+        'card.poetry': 'पद्य',
+        'card.poetry.desc': 'कविताएँ',
+        'card.grammar': 'व्याकरण',
+        'card.grammar.desc': 'रस, छंद, अलंकार',
+        'card.composition': 'रचना',
+        'card.composition.desc': 'अनुच्छेद, पत्र',
+        'about.title': 'हमारे बारे में',
+        'about.text': 'कक्षा – The Class एक समर्पित मंच है जो CBSE कक्षा 1 से 10 के छात्रों को हिंदी-बी में उत्कृष्टता दिलाने के लिए बनाया गया है। हमारे संसाधन, पीडीएफ नोट्स और प्रश्नोत्तर आपकी तैयारी को मजबूत बनाते हैं।',
+        'about.contact': 'संदेश भेजें',
+        'founder.name': 'संस्थापक: Monika Som',
+        'founder.desc': 'अनुभवी हिंदी शिक्षिका, 10+ वर्षों का अनुभव, CBSE पाठ्यक्रम की गहरी समझ।',
+        'founder.quote': '"शिक्षा वह जादू है जो जीवन को रोशन कर देता है। मेहनत करो, सपने देखो और उन्हें पूरा करो।"',
+        'back.syllabus': 'पाठ्यक्रम',
+        'back.stories': 'कहानियाँ',
+        'stories.title': 'कहानियाँ',
+        'story.premchand': 'प्रेमचंद (संपूर्ण प्रश्नोत्तर)',
+        'pdf.view': 'साथ देखे',
+        'footer.subtitle': 'हिंदी - बी · कक्षा 1-10 CBSE',
+        'footer.links': 'त्वरित लिंक',
+        'nav.contact': 'संपर्क करें',
+        'footer.resources': 'संसाधन',
+        'footer.badebhai': 'बड़े भाई साहब PDF',
+        'footer.syllabus': 'सिलेबस',
+        'footer.rights': 'सर्वाधिकार सुरक्षित'
+      }
+    };
+
+    function setLanguage(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+          el.innerText = translations[lang][key];
+        }
+      });
+      document.querySelectorAll('.lang-switch button').forEach(btn => {
+        btn.classList.toggle('active-lang', btn.getAttribute('data-lang') === lang);
+      });
+    }
+
+    document.querySelectorAll('.lang-switch button').forEach(btn => {
+      btn.addEventListener('click', (e) => setLanguage(e.target.getAttribute('data-lang')));
+    });
+
+    setLanguage('hi');
+  </script>
+</body>
+</html>
