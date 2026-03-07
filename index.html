@@ -162,7 +162,7 @@
     .header {
       background: rgba(255,255,255,0.9);
       backdrop-filter: blur(8px);
-      padding: 2rem 6%;        /* increased vertical padding for taller header */
+      padding: 2rem 6%;        /* keep tall padding for big logo */
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -176,29 +176,29 @@
     .logo-container {
       display: flex;
       align-items: center;
-      gap: 2rem;               /* more space between logo and text */
+      gap: 2rem;               /* keep large gap */
       cursor: pointer;
     }
     .logo-img {
-      width: 100px;             /* slightly larger logo */
+      width: 100px;             /* keep big logo */
       height: 100px;
       object-fit: contain;
       transition: transform 0.3s;
       background: transparent;
-      border: none;             /* no border */
+      border: none;
     }
     .logo-img:hover {
       transform: rotate(5deg) scale(1.05);
     }
     .logo-text {
       font-family: 'Bangers', cursive;
-      font-size: 2.8rem;        /* bigger text */
+      font-size: 2.8rem;        /* keep large text */
       color: #1e293b;
       line-height: 1.2;
     }
     .logo-text .small {
       font-family: 'Poppins', sans-serif;
-      font-size: 1.2rem;        /* slightly bigger */
+      font-size: 1.2rem;
       font-weight: 500;
       color: #d44c2f;
       letter-spacing: 0.5px;
@@ -206,17 +206,17 @@
     }
     .nav-links {
       display: flex;
-      gap: 3rem;
+      gap: 1.8rem;              /* reduced gap for normal menu */
     }
     .nav-links button {
       background: transparent;
       border: none;
-      font-size: 1.7rem;        /* larger buttons */
+      font-size: 1.3rem;        /* normal size */
       font-weight: 600;
       color: #1e293b;
       cursor: pointer;
       transition: 0.2s;
-      padding: 0.8rem 1.5rem;   /* more padding for longer buttons */
+      padding: 0.5rem 1rem;     /* normal padding */
       border-radius: 40px;
     }
     .nav-links button:hover {
@@ -227,16 +227,16 @@
       display: flex;
       gap: 0.3rem;
       background: #f1f5f9;
-      padding: 0.3rem;
+      padding: 0.2rem;
       border-radius: 40px;
       border: 2px solid #d44c2f;
     }
     .lang-switch button {
       background: transparent;
       border: none;
-      font-size: 1.2rem;        /* larger language buttons */
+      font-size: 0.9rem;        /* normal size */
       font-weight: 600;
-      padding: 0.6rem 1.4rem;
+      padding: 0.3rem 0.8rem;   /* normal padding */
       border-radius: 40px;
       cursor: pointer;
       transition: 0.2s;
@@ -827,7 +827,7 @@
     <!-- HEADER -->
     <header class="header">
       <div class="logo-container" onclick="showView('homeView')">
-        <!-- NEW LOGO URL -->
+        <!-- NEW LOGO URL (unchanged) -->
         <img src="https://i.ibb.co/mFVPjBSv/image-2026-03-07-205509456.png" alt="Kaksha logo" class="logo-img">
         <div class="logo-text">
           KAKSHA <span class="small">– The class</span>
@@ -972,8 +972,7 @@
       <div class="footer-content">
         <div class="footer-col">
           <div class="footer-logo">
-            <!-- footer logo can stay same or also update; I'll keep old one -->
-            <img src="https://i.ibb.co/mFVPjBSv/image-2026-03-07-205509456.png" alt="Kaksha logo">
+            <img src="https://yt3.googleusercontent.com/a2aW8c2gUETQI2Id0Sd1-x45NmtLlWtBAHJxJDA6uFx7Gqf2Z0cmz5LbJcfzMAapjSKcCeZKuA=s160-c-k-c0x00ffffff-no-rj" alt="Kaksha logo">
             <span>KAKSHA – The class</span>
           </div>
           <p style="margin: 1rem 0; font-size:0.9rem;" data-i18n="footer.subtitle">हिंदी - बी · कक्षा 1-12 CBSE</p>
@@ -1033,7 +1032,7 @@
       setTimeout(() => {
         loadingScreen.classList.remove('show');
         mainContent.classList.add('visible');
-      }, 2000); // 2 seconds of bouncing
+      }, 2000);
     }
 
     document.getElementById('laptop-btn').addEventListener('click', startLoading);
@@ -1060,7 +1059,6 @@
       });
     }
 
-    // Show notifications after main content appears
     setTimeout(() => {
       const ytNotif = document.getElementById('subscribeNotification');
       if (ytNotif) ytNotif.classList.add('show');
@@ -1251,7 +1249,7 @@
       win.document.close();
     }
 
-    // ---------- LANGUAGE TRANSLATION (updated for class 1-12) ----------
+    // ---------- LANGUAGE TRANSLATION ----------
     const translations = {
       en: {
         'nav.home': 'HOME',
