@@ -369,7 +369,7 @@ function handlePoetryQA() {
 }
 
 function handlePoetryVideo() {
-  alert('वीडियो जल्द उपलब्ध होंगे / Video coming soon!');
+  window.open('https://www.youtube.com/watch?v=D9k8XkNpM64', '_blank');
 }
 
 function handlePoetryTest() {
