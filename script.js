@@ -42,7 +42,7 @@ const grammarTopics = [
   { id: 'padband', name: 'पदबंध', nameEn: 'Padband', videoUrl: 'https://www.youtube.com/watch?v=JpYtufMCk0U' }
 ];
 
-// Story Test Bank - 100 objective questions
+// Story Test Bank - 100 objective questions (ONLY for Class 10)
 const storyTestBank = [
   { question: "बड़े भाई साहब छोटे भाई से उम्र में कितने बड़े थे?", options: ["3 साल", "5 साल", "7 साल", "10 साल"], answer: 1 },
   { question: "छोटे भाई की रुचि किसमें थी?", options: ["पढ़ाई में", "खेल-कूद में", "लिखाई में", "संगीत में"], answer: 1 },
@@ -150,7 +150,7 @@ const storyTestBank = [
   { question: "बड़े भाई साहब के अनुसार छोटा भाई क्या सोचने लगा?", options: ["अब पढ़े या न पढ़े पास हो जाएगा", "अब और मेहनत करेगा", "अब खेलेगा नहीं", "अब सिर्फ पढ़ेगा"], answer: 0 }
 ];
 
-// Poetry (Kabir) Test Bank - 100 objective questions
+// Poetry (Kabir) Test Bank - 100 objective questions (ONLY for Class 10)
 const poetryTestBank = [
   { question: "मीठी वाणी बोलने से क्या प्राप्त होता है?", options: ["धन", "यश", "सुख और शीतलता", "मान"], answer: 2 },
   { question: "दीपक दिखाई देने पर क्या मिट जाता है?", options: ["भूख", "प्यास", "अंधियारा", "दुख"], answer: 2 },
@@ -314,8 +314,13 @@ function handleStoriesClick() {
     alert('कृपया पहले कक्षा चुनें / Please select a class first');
     return;
   }
-  showView('storiesView');
-  renderStoriesList(selectedClass);
+  // ONLY Class 10 has stories
+  if (selectedClass == 10) {
+    showView('storiesView');
+    renderStoriesList(selectedClass);
+  } else {
+    showUnavailable('stories');
+  }
 }
 
 function handlePoetryClick() {
@@ -323,8 +328,8 @@ function handlePoetryClick() {
     alert('कृपया पहले कक्षा चुनें / Please select a class first');
     return;
   }
-  // For class 9-10, show poetry chapters
-  if (selectedClass == 9 || selectedClass == 10) {
+  // ONLY Class 10 has poetry
+  if (selectedClass == 10) {
     showView('poetryChaptersView');
     renderPoetryChapters();
   } else {
@@ -336,7 +341,7 @@ function renderPoetryChapters() {
   const container = document.getElementById('poetryChaptersContainer');
   container.innerHTML = '';
   
-  // Add Kabir ki Saakhiyan
+  // Add Kabir ki Saakhiyan (Only for Class 10)
   const kabirCard = document.createElement('div');
   kabirCard.className = 'poetry-card';
   kabirCard.innerHTML = `
@@ -358,8 +363,13 @@ function handleGrammarClick() {
     alert('कृपया पहले कक्षा चुनें / Please select a class first');
     return;
   }
-  showView('grammarTopicsView');
-  renderGrammarTopics(selectedClass);
+  // ONLY Class 10 has grammar
+  if (selectedClass == 10) {
+    showView('grammarTopicsView');
+    renderGrammarTopics(selectedClass);
+  } else {
+    showUnavailable('grammar');
+  }
 }
 
 // ---------- POETRY OPTIONS HANDLERS ----------
@@ -559,7 +569,7 @@ function renderStoriesList(cls) {
     msgCard.innerHTML = `
       <i class="fas fa-ban"></i>
       <h3>कोई कहानी उपलब्ध नहीं</h3>
-      <p>कक्षा ${cls} के लिए अभी कोई कहानी नहीं है।</p>
+      <p>कक्षा ${cls} के लिए अभी कोई कहानी उपलब्ध नहीं है।</p>
     `;
     container.appendChild(msgCard);
   }
@@ -583,7 +593,7 @@ function showStoryDetail(storyName) {
   showView('storyDetailView');
 }
 
-// ---------- GRAMMAR TOPICS (ONLY for class 10, "uplabd nhi hai" for others) ----------
+// ---------- GRAMMAR TOPICS (ONLY for class 10) ----------
 function renderGrammarTopics(cls) {
   const container = document.getElementById('grammarTopicsContainer');
   container.innerHTML = '';
@@ -622,8 +632,8 @@ function renderGrammarTopics(cls) {
     notAvailableDiv.innerHTML = `
       <i class="fas fa-times-circle" style="font-size: 3rem; color: #856404; margin-bottom: 1rem; display: inline-block;"></i>
       <h3 style="color: #856404;">व्याकरण सामग्री उपलब्ध नहीं है</h3>
-      <p style="color: #856404;">कक्षा ${cls} के लिए व्याकरण सामग्री उपलब्ध नहीं है। केवल कक्षा 10 के लिए उपलब्ध।</p>
-      <p style="color: #856404;">Grammar content is not available for class ${cls}. Only available for class 10.</p>
+      <p style="color: #856404;">कक्षा ${cls} के लिए व्याकरण सामग्री उपलब्ध नहीं है।</p>
+      <p style="color: #856404;">केवल कक्षा 10 के लिए उपलब्ध।</p>
     `;
     container.appendChild(notAvailableDiv);
   }
@@ -897,8 +907,17 @@ function showUnavailable(section) {
     'composition': 'रचना'
   };
   const sectionHindi = titleMap[section] || section;
-  document.getElementById('unavailableTitle').innerText = sectionHindi;
-  document.getElementById('unavailableMessage').innerHTML = `कोई ${sectionHindi} उपलब्ध नहीं<br>कक्षा ${selectedClass} के लिए अभी कोई ${sectionHindi} नहीं है।`;
+  
+  // Create a nice "Not Available" message
+  const notAvailableDiv = document.getElementById('unavailableMessage');
+  notAvailableDiv.innerHTML = `
+    <div style="text-align: center; padding: 3rem; background: #fff3cd; border-radius: 20px; border: 2px solid #ffeeba;">
+      <i class="fas fa-times-circle" style="font-size: 4rem; color: #856404; margin-bottom: 1rem; display: inline-block;"></i>
+      <h2 style="color: #856404;">${sectionHindi} उपलब्ध नहीं है</h2>
+      <p style="color: #856404; font-size: 1.2rem;">कक्षा ${selectedClass} के लिए ${sectionHindi} उपलब्ध नहीं है।</p>
+      <p style="color: #856404; font-size: 1rem;">केवल कक्षा 10 के लिए उपलब्ध।</p>
+    </div>
+  `;
   showView('unavailableView');
 }
 
@@ -922,7 +941,6 @@ const translations = {
     'card.composition.desc': 'Paragraph, letter',
     'grammar.title': 'Grammar Topics',
     'grammar.video': 'Video',
-    'grammar.comingSoon': 'Grammar content for class {cls} coming soon!',
     'stories.title': 'Stories',
     'search.placeholder': 'Search...',
     'story.qa': 'Q&A',
@@ -973,7 +991,6 @@ const translations = {
     'card.composition.desc': 'अनुच्छेद, पत्र',
     'grammar.title': 'व्याकरण प्रकरण',
     'grammar.video': 'वीडियो',
-    'grammar.comingSoon': 'कक्षा {cls} के लिए व्याकरण सामग्री जल्द आ रही है!',
     'stories.title': 'कहानियाँ',
     'search.placeholder': 'खोजें...',
     'story.qa': 'Q&A',
