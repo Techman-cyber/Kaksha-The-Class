@@ -38,6 +38,7 @@ let timeLeft = 5 * 60; // 5 minutes in seconds
 const grammarTopics = [
   { id: 'vakya', name: 'वाक्य रूपांतर', nameEn: 'Vakya Rupantar', videoUrl: 'https://www.youtube.com/watch?v=pHNiyAA4s2c' },
   { id: 'samas', name: 'समास', nameEn: 'Samas', videoUrl: 'https://www.youtube.com/watch?v=R81YI_AfNf4' },
+  { id: 'shabd', name: 'शब्द', nameEn: 'Shabd', videoUrl: 'https://www.youtube.com/watch?v=pf2BhD9QJ3k&t=117s' },
   { id: 'padband', name: 'पदबंध', nameEn: 'Padband', videoUrl: 'https://www.youtube.com/watch?v=JpYtufMCk0U' }
 ];
 
