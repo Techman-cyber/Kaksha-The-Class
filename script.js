@@ -34,7 +34,7 @@ let testSource = ''; // 'story' or 'poetry'
 let timerInterval;
 let timeLeft = 5 * 60; // 5 minutes in seconds
 
-// Grammar topics data
+// Grammar topics data (ONLY for Class 10)
 const grammarTopics = [
   { id: 'vakya', name: 'वाक्य रूपांतर', nameEn: 'Vakya Rupantar', videoUrl: 'https://www.youtube.com/watch?v=pHNiyAA4s2c' },
   { id: 'samas', name: 'समास', nameEn: 'Samas', videoUrl: 'https://www.youtube.com/watch?v=R81YI_AfNf4' },
@@ -583,44 +583,49 @@ function showStoryDetail(storyName) {
   showView('storyDetailView');
 }
 
-// ---------- GRAMMAR TOPICS (video only for class 10) ----------
+// ---------- GRAMMAR TOPICS (ONLY for class 10, "uplabd nhi hai" for others) ----------
 function renderGrammarTopics(cls) {
   const container = document.getElementById('grammarTopicsContainer');
   container.innerHTML = '';
-  const isClass10 = (cls == 10);
   const currentLang = document.querySelector('.lang-switch button.active-lang')?.getAttribute('data-lang') || 'hi';
 
-  grammarTopics.forEach(topic => {
-    const topicDiv = document.createElement('div');
-    topicDiv.className = 'topic-card';
-    const topicName = (currentLang === 'en') ? topic.nameEn : topic.name;
+  // Only show grammar topics for Class 10
+  if (cls == 10) {
+    grammarTopics.forEach(topic => {
+      const topicDiv = document.createElement('div');
+      topicDiv.className = 'topic-card';
+      const topicName = (currentLang === 'en') ? topic.nameEn : topic.name;
 
-    let actionsHtml = '';
-    if (isClass10) {
-      actionsHtml = `
+      let actionsHtml = `
         <div class="topic-actions">
           <button class="topic-btn video" onclick="window.open('${topic.videoUrl}', '_blank')"><i class="fab fa-youtube"></i> <span data-i18n="grammar.video">वीडियो</span></button>
         </div>
       `;
-    } else {
-      actionsHtml = '';
-    }
 
-    topicDiv.innerHTML = `
-      <h3>${topicName}</h3>
-      ${actionsHtml}
+      topicDiv.innerHTML = `
+        <h3>${topicName}</h3>
+        ${actionsHtml}
+      `;
+      container.appendChild(topicDiv);
+    });
+  } else {
+    // Show "Not Available" message for other classes
+    const notAvailableDiv = document.createElement('div');
+    notAvailableDiv.className = 'not-available-message';
+    notAvailableDiv.style.textAlign = 'center';
+    notAvailableDiv.style.marginTop = '2rem';
+    notAvailableDiv.style.padding = '2rem';
+    notAvailableDiv.style.backgroundColor = '#fff3cd';
+    notAvailableDiv.style.borderRadius = '15px';
+    notAvailableDiv.style.border = '1px solid #ffeeba';
+    
+    notAvailableDiv.innerHTML = `
+      <i class="fas fa-times-circle" style="font-size: 3rem; color: #856404; margin-bottom: 1rem; display: inline-block;"></i>
+      <h3 style="color: #856404;">व्याकरण सामग्री उपलब्ध नहीं है</h3>
+      <p style="color: #856404;">कक्षा ${cls} के लिए व्याकरण सामग्री उपलब्ध नहीं है। केवल कक्षा 10 के लिए उपलब्ध।</p>
+      <p style="color: #856404;">Grammar content is not available for class ${cls}. Only available for class 10.</p>
     `;
-    container.appendChild(topicDiv);
-  });
-
-  if (!isClass10) {
-    const msg = document.createElement('p');
-    msg.style.textAlign = 'center';
-    msg.style.marginTop = '2rem';
-    msg.style.fontSize = '1.2rem';
-    msg.setAttribute('data-i18n', 'grammar.comingSoon');
-    msg.innerText = 'कक्षा ' + cls + ' के लिए व्याकरण सामग्री जल्द आ रही है!';
-    container.appendChild(msg);
+    container.appendChild(notAvailableDiv);
   }
 }
 
