@@ -34,11 +34,15 @@ let testSource = ''; // 'story' or 'poetry'
 let timerInterval;
 let timeLeft = 5 * 60; // 5 minutes in seconds
 
-// Grammar topics data (ONLY for Class 10)
-const grammarTopics = [
+// Grammar topics data for Class 9
+const grammarTopicsClass9 = [
+  { id: 'shabd', name: 'शब्द', nameEn: 'Shabd', videoUrl: 'https://www.youtube.com/watch?v=pf2BhD9QJ3k&t=117s' }
+];
+
+// Grammar topics data for Class 10
+const grammarTopicsClass10 = [
   { id: 'vakya', name: 'वाक्य रूपांतर', nameEn: 'Vakya Rupantar', videoUrl: 'https://www.youtube.com/watch?v=pHNiyAA4s2c' },
   { id: 'samas', name: 'समास', nameEn: 'Samas', videoUrl: 'https://www.youtube.com/watch?v=R81YI_AfNf4' },
-  { id: 'shabd', name: 'शब्द', nameEn: 'Shabd', videoUrl: 'https://www.youtube.com/watch?v=pf2BhD9QJ3k&t=117s' },
   { id: 'padband', name: 'पदबंध', nameEn: 'Padband', videoUrl: 'https://www.youtube.com/watch?v=JpYtufMCk0U' }
 ];
 
@@ -363,8 +367,8 @@ function handleGrammarClick() {
     alert('कृपया पहले कक्षा चुनें / Please select a class first');
     return;
   }
-  // ONLY Class 10 has grammar
-  if (selectedClass == 10) {
+  // Class 9 and Class 10 have grammar
+  if (selectedClass == 9 || selectedClass == 10) {
     showView('grammarTopicsView');
     renderGrammarTopics(selectedClass);
   } else {
@@ -593,15 +597,35 @@ function showStoryDetail(storyName) {
   showView('storyDetailView');
 }
 
-// ---------- GRAMMAR TOPICS (ONLY for class 10) ----------
+// ---------- GRAMMAR TOPICS (Class 9 and Class 10) ----------
 function renderGrammarTopics(cls) {
   const container = document.getElementById('grammarTopicsContainer');
   container.innerHTML = '';
   const currentLang = document.querySelector('.lang-switch button.active-lang')?.getAttribute('data-lang') || 'hi';
 
-  // Only show grammar topics for Class 10
-  if (cls == 10) {
-    grammarTopics.forEach(topic => {
+  // Class 9 Grammar - Only Shabd
+  if (cls == 9) {
+    grammarTopicsClass9.forEach(topic => {
+      const topicDiv = document.createElement('div');
+      topicDiv.className = 'topic-card';
+      const topicName = (currentLang === 'en') ? topic.nameEn : topic.name;
+
+      let actionsHtml = `
+        <div class="topic-actions">
+          <button class="topic-btn video" onclick="window.open('${topic.videoUrl}', '_blank')"><i class="fab fa-youtube"></i> <span data-i18n="grammar.video">वीडियो</span></button>
+        </div>
+      `;
+
+      topicDiv.innerHTML = `
+        <h3>${topicName}</h3>
+        ${actionsHtml}
+      `;
+      container.appendChild(topicDiv);
+    });
+  }
+  // Class 10 Grammar - Vakya Rupantar, Samas, Padband
+  else if (cls == 10) {
+    grammarTopicsClass10.forEach(topic => {
       const topicDiv = document.createElement('div');
       topicDiv.className = 'topic-card';
       const topicName = (currentLang === 'en') ? topic.nameEn : topic.name;
@@ -633,7 +657,7 @@ function renderGrammarTopics(cls) {
       <i class="fas fa-times-circle" style="font-size: 3rem; color: #856404; margin-bottom: 1rem; display: inline-block;"></i>
       <h3 style="color: #856404;">व्याकरण सामग्री उपलब्ध नहीं है</h3>
       <p style="color: #856404;">कक्षा ${cls} के लिए व्याकरण सामग्री उपलब्ध नहीं है।</p>
-      <p style="color: #856404;">केवल कक्षा 10 के लिए उपलब्ध।</p>
+      <p style="color: #856404;">केवल कक्षा 9 और 10 के लिए उपलब्ध।</p>
     `;
     container.appendChild(notAvailableDiv);
   }
